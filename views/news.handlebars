@@ -1,0 +1,40 @@
+<h1>Getting the News</h1>
+<ul>
+    <li>
+        <h4> Makings the get request </h4>
+        <p>In order to make get request we need a game. The get request needs an APPId
+            that can found in the steamdb.
+            < href=https://steamdb.info/stats/gameratings/>Here</a>is a list of the top 100 games. Once we have the APPID we passed
+            it in a GET request like this <strong> http://api.steampowered.com/ISteamNews/GetNewsForApp/v0003/?appid=440&count=3&maxlength=300&format=json</strong>,
+            substituting in your APPID
+        </p>
+    </li>
+    <li>
+        <h4> Displaying the data</h4>
+        <p>Once we make our request we are returned with a JSON file. Unless you are
+            a robot, it is going to be hard to read straight JSON. Thankfully we
+            can use the JSON.parse() in order to save the data as an object. From
+            here we can manipulate the properties to display the data in a more
+            readable format.
+        </p>
+    </li>
+    <li>
+        <h4> Formatting the dtat</h4>
+        <p>By accessing the elements and using some for loops we can add some formatting
+            to our JSON object.
+        </p>
+        <div>
+            <p>Try it yourself</p>
+            <fieldset>
+                <label>Enter an AppID
+                    <input type="text" id="newsappID" size="30" maxlength=10></input>
+                </label>
+                <input type="submit" value="Submit" id="newsSubmit">
+            </fieldset>
+
+        </div>
+        <br>
+        <div id=JSON-DATA>
+        </div>
+    </li>
+</ul>
