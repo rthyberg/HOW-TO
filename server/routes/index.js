@@ -6,10 +6,10 @@ module.exports = function(app) {
     });
 
     app.post('/steam-news', function(req, res) {
-        var url =" http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?"
+        var url ="http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?"
         var context = {};
         var appid = req.body['newsappID'] || "440";
-        request({url+"appid="+appid+"&count=3&maxlength=300&format=json"}
+        request({(url+"appid="+appid+"&count=3&maxlength=300&format=json")}
                 function(err,response,newsJson) {
                    if(!err & response.statusCode < 400){
                        context.news = newsJson;
