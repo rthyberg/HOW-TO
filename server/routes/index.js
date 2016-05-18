@@ -1,6 +1,6 @@
 var path = require('path');
 var api_key = '702A6579FF7D3F81D418F7B53C1BD5F5';
-module.exports = function(app) {
+module.exports = function(app,request) {
     app.get('/', function(req, res) { // the root home page
         res.render('home');
     });

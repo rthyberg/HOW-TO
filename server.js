@@ -20,7 +20,7 @@ app.set('port', 3000); // set port 3001
 
 
 ////////////////////////////Routes
-require('./server/routes')(app);
+require('./server/routes')(app)(requests);
 
 
 /////////////////////////////Start the app
