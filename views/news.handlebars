@@ -19,32 +19,35 @@
         </p>
     </li>
     <li>
-        <h4> Formatting the dtat</h4>
+        <h4> Formatting the data</h4>
         <p>By accessing the elements and using some for loops we can add some formatting
             to our JSON object.
         </p>
-        <div>
-            <p>Try it yourself</p>
-            <form method="POST">
-            <fieldset>
-                <label>Enter an AppID
-                    <input type="text" name="newsappID" size="30" maxlength=10></input>
-                </label>
-                <input type="submit" name="newsSubmit" value="Submit">
-            </fieldset>
-    </form>
+        <p>Try the form below. Using some handlebars logic, it sets each header to
+            be a title and its content to be the article
+            <div>
+                <form method="POST">
+                    <fieldset>
+                        <label>Enter an AppID
+                            <input type="text" name="newsappID" size="30" maxlength=10></input>
+                        </label>
+                        <input type="submit" name="newsSubmit" value="Submit">
+                    </fieldset>
+                </form>
 
-        </div>
-        <br>
-        <div id=JSON-DATA>
-                {{#if news}}
-                        <ul>
-                                {{#each news}}
-                                        <li>
-                                                <p> this.newsitems </p>
-                                        </li>
-                                {{/each}}
-                        </ul>
-        </div>
+            </div>
+            <br>
+            <div id=JSON-DATA>
+                {{#if items}}
+                <ul>
+                    {{#each items}}
+                    <li>
+                        <h5>{{title}}</h5>
+                        <p>{{{contents}}}</p>
+                    </li>
+                    {{/each}}
+                </ul>
+                {{/if}}
+            </div>
     </li>
 </ul>

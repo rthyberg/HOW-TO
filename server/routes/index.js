@@ -1,48 +1,56 @@
 var path = require('path');
 var api_key = '702A6579FF7D3F81D418F7B53C1BD5F5';
-module.exports = function(app,request) {
+module.exports = function(app, request) {
     app.get('/', function(req, res) { // the root home page
         res.render('home');
     });
 
-app.get('/steam-news', function(req, res) {
-        var url ="http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?"
+    app.get('/steam-news', function(req, res) {
+        var url = "http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?"
         var context = {};
-        var appid ="440";
-        request(url+"appid="+appid+"&count=3&maxlength=300&format=json",
-                function(err,response,newsJson) {
-                   if(!err & response.statusCode < 400){
-                       context.news = JSON.parse(newsJson);
-                       //context.newsitem=context.news.newsitem["title"];
-                       console.log(context.news.appid);
-                       console.log(context.newsitem);
-                       //res.render('news',context);
-                   } else {
-                     if(response) {
-                       console.log(response.statusCode);
-                     }
-                     next(err);
-                   }
-       });
+        context.items = [];
+        var appid = "440";
+        var count = "3";
+        request(url + "appid=" + appid + "&count=" + count + "&maxlength=300&format=json",
+            function(err, response, newsJson) {
+                if (!err & response.statusCode < 400) {
+                    context.news = JSON.parse(newsJson);
+                    //context.newsitem=context.news.newsitem["title"];
+                    for (item in context.news.appnews.newsitems) {
+                        context.items[item] = context.news.appnews.newsitems[item];
+                    }
+                    res.render('news', context);
+                } else {
+                    if (response) {
+                        console.log(response.statusCode);
+                    }
+                    next(err);
+                }
+            });
     });
 
-
     app.post('/steam-news', function(req, res) {
-        var url ="http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?"
+        console.log("post request made");
+        var url = "http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?"
         var context = {};
-        var appid = req.body['newsappID'];
-        request(url+"appid="+appid+"&count=3&maxlength=300&format=json",
-                function(err,response,newsJson) {
-                   if(!err & response.statusCode < 400){
-                       context.news = newsJson;
-                       res.render('news',context);
-                   } else {
-                     if(response) {
-                       console.log(response.statusCode);
-                     }
-                     next(err);
-                   }
-       });
+        context.items = [];
+        var appid = req.body["newsappID"] || appid;
+        var count = "3";
+        request(url + "appid=" + appid + "&count=" + count + "&maxlength=300&format=json",
+            function(err, response, newsJson) {
+                if (!err & response.statusCode < 400) {
+                    context.news = JSON.parse(newsJson);
+                    for (item in context.news.appnews.newsitems) {
+                        context.items[item] = context.news.appnews.newsitems[item];
+                    }
+                    res.render('news', context);
+                } else {
+                    if (response) {
+                        console.log(response.statusCode);
+                    }
+                    next(err);
+                }
+            });
     });
 
     app.use(function(req, res) { // the no page page
