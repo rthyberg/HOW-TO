@@ -12,7 +12,8 @@ app.get('/steam-news', function(req, res) {
         request(url+"appid="+appid+"&count=3&maxlength=300&format=json",
                 function(err,response,newsJson) {
                    if(!err & response.statusCode < 400){
-                       context.news = newsJson;
+                       context.news = JSON.parse(newsJson);
+                       console.log(context.news);
                        res.render('news',context);
                    } else {
                      if(response) {
