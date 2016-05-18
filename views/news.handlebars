@@ -25,16 +25,26 @@
         </p>
         <div>
             <p>Try it yourself</p>
+            <form method="POST">
             <fieldset>
                 <label>Enter an AppID
-                    <input type="text" id="newsappID" size="30" maxlength=10></input>
+                    <input type="text" name="newsappID" size="30" maxlength=10></input>
                 </label>
-                <input type="submit" value="Submit" id="newsSubmit">
+                <input type="submit" name="newsSubmit" value="Submit">
             </fieldset>
+    </form>
 
         </div>
         <br>
         <div id=JSON-DATA>
+                {{#if news}}
+                        <ul>
+                                {{#each news}}
+                                        <li>
+                                                <p> this.newsitems </p>
+                                        </li>
+                                {{/each}}
+                        </ul>
         </div>
     </li>
 </ul>
