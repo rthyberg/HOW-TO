@@ -13,10 +13,10 @@ app.get('/steam-news', function(req, res) {
                 function(err,response,newsJson) {
                    if(!err & response.statusCode < 400){
                        context.news = JSON.parse(newsJson);
-                       context.newsitem=context.news.newsitem["title"];
-                       console.log(context.news);
+                       //context.newsitem=context.news.newsitem["title"];
+                       console.log(context.news.appid);
                        console.log(context.newsitem);
-                       res.render('news',context);
+                       //res.render('news',context);
                    } else {
                      if(response) {
                        console.log(response.statusCode);
