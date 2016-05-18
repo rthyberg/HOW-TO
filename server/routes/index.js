@@ -5,10 +5,29 @@ module.exports = function(app) {
         res.render('home');
     });
 
+app.get('/steam-news', function(req, res) {
+        var url ="http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?"
+        var context = {};
+        var appid ="440";
+        request(url+"appid="+appid+"&count=3&maxlength=300&format=json",
+                function(err,response,newsJson) {
+                   if(!err & response.statusCode < 400){
+                       context.news = newsJson;
+                       res.render('news',context);
+                   } else {
+                     if(response) {
+                       console.log(response.statusCode);
+                     }
+                     next(err);
+                   }
+       });
+    });
+
+
     app.post('/steam-news', function(req, res) {
         var url ="http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?"
         var context = {};
-        var appid = req.body['newsappID'] || "440";
+        var appid = req.body['newsappID'];
         request(url+"appid="+appid+"&count=3&maxlength=300&format=json",
                 function(err,response,newsJson) {
                    if(!err & response.statusCode < 400){
