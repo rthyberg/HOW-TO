@@ -47,89 +47,95 @@ module.exports = function(app, request, moment) {
                 } else {
                     if (response) {
                         console.log(response.statusCode);
-                        if(response.statusCode =403) {
-                           context.items[0]={'contents': "The appid '"
-                                              +appid+
-                                            "' does not exist" };
-                           res.render('news',context);
+                        if (response.statusCode = 403) {
+                            context.items[0] = {
+                                'contents': "The appid '" + appid +
+                                    "' does not exist"
+                            };
+                            res.render('news', context);
                         }
                     }
-                   // next(err);
+                    // next(err);
                 }
             });
     });
 
     app.get('/steamid', function(req, res, next) {
-        var url = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?";
-        var context = {};
-        context.items = [];
-        var steamid = "76561197979155270";
-        request(url + "key=" + api_key + "&steamids=" +steamid,
-            function(err, response, idJson) {
-                if (!err & response.statusCode < 400) {
-                    context.steam = JSON.parse(idJson);
-                    context.steam.username = context.steam.response.players[0]["personaname"];
-                    context.steam.picture = context.steam.response.players[0]["avatarfull"];
-                    context.steam.unixTime = context.steam.response.players[0]["timecreated"];
-                    var day = moment.unix(context.steam.unixTime);
-                    context.steam.date = day.format();
-                   /* console.log(context.steam);
-                    console.log(context.steam.username);
-                    console.log(context.steam.picture);
-                    console.log(context.steam.unixTime);
-                    console.log(context.steam.date);
-                    */
-                    res.render('steamid', context);
+            var url = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?";
+            var context = {};
+            context.items = [];
+            var steamid = "76561197979155270";
+            request(url + "key=" + api_key + "&steamids=" + steamid,
+                function(err, response, idJson) {
+                    if (!err & response.statusCode < 400) {
+                        context.steam = JSON.parse(idJson);
+                        context.steam.username = context.steam.response.players[0]["personaname"];
+                        context.steam.picture = context.steam.response.players[0]["avatarfull"];
+                        context.steam.unixTime = context.steam.response.players[0]["timecreated"];
+                        var day = moment.unix(context.steam.unixTime);
+                        context.steam.date = day.format();
+                        res.render('steamid', context);
+                    /* console.log(context.steam);
+                     console.log(context.steam.username);
+                     console.log(context.steam.picture);
+                     console.log(context.steam.unixTime);
+                     console.log(context.steam.date);
+                     */
                 } else {
                     if (response) {
                         console.log(response.statusCode);
-                        res.render('steamid',context.steam.username ="No such user");
+                        res.render('steamid', context.steam.username = "No such user");
                     }
                     //next(err);
                 }
             });
     });
 
-    app.post('/steamid', function(req, res, next) {
-        var url = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?";
-        var context = {};
-        var steamid = req.body["steamid"] || steamid;
-        request(url + "key=" + api_key + "&steamids=" +steamid,
-            function(err, response, idJson) {
-                if (!err & response.statusCode < 400) {
-                    context.steam = JSON.parse(idJson);
+app.post('/steamid', function(req, res, next) {
+    var url = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?";
+    var context = {};
+    var steamid = req.body["steamid"] || steamid;
+    request(url + "key=" + api_key + "&steamids=" + steamid,
+        function(err, response, idJson) {
+            if (!err & response.statusCode < 400) {
+                context.steam = JSON.parse(idJson);
+                console.log(context.steam.response.players[0]);
+                if (context.steam.response.players[0] !== undefined) {
                     context.steam.username = context.steam.response.players[0]["personaname"];
                     context.steam.picture = context.steam.response.players[0]["avatarfull"];
                     context.steam.unixTime = context.steam.response.players[0]["timecreated"];
                     var day = moment.unix(context.steam.unixTime);
                     context.steam.date = day.format();
-                   /* console.log(context.steam);
-                    console.log(context.steam.username);
-                    console.log(context.steam.picture);
-                    console.log(context.steam.unixTime);
-                    console.log(context.steam.date);
-                    */
+                    /* console.log(context.steam);
+                     console.log(context.steam.username);
+                     console.log(context.steam.picture);
+                     console.log(context.steam.unixTime);
+                     console.log(context.steam.date);
+                     */
                     res.render('steamid', context);
                 } else {
-                    if (response) {
-                        console.log(response.statusCode);
-                        res.render('steamid', context.steam.username ="No such user");
-                    }
-                    //next(err);
+                    res.render('steamidnouser');
                 }
-            });
-    });
+            } else {
+                if (response) {
+                    console.log(response.statusCode);
+                    res.render('steamid', context.steam.username = "No such user");
+                }
+                //next(err);
+            }
+        });
+});
 
 
-    app.use(function(req, res) { // the no page page
-        res.status(404);
-        res.render('404');
-    });
+app.use(function(req, res) { // the no page page
+    res.status(404);
+    res.render('404');
+});
 
-    app.use(function(err, req, res, next) { // server error page
-        console.error(err.stack);
-        res.type('plain/text');
-        res.status(500);
-        res.render('500');
-    });
+app.use(function(err, req, res, next) { // server error page
+    console.error(err.stack);
+    res.type('plain/text');
+    res.status(500);
+    res.render('500');
+});
 };
