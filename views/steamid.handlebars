@@ -56,5 +56,20 @@
                 {{/if}}
             </div>
     </li>
+    <li>
+  <iframe
+  style="width: 100%; height: 300px"
+  src= "https://jsfiddle.net/funkydel/x41zwpm0/embedded/"
+  >
+</iframe>
+<p>In this api call, we will be needing the api key we generated earlier on. I did not link mine in this code. One thing that has changed in this code
+        is the extra logic to test if the context.steam.response.players[0] exists. This is done so we dont throw an error in case the user throws us
+        a bad get request. The JSON object that returns wont parse the same way and will crash the server. Instead if you fail to pass a valid id, it
+        opens a new handlebars adds text saying "That user does note exist". When a user does pass the a valid 64-bit steamid, the JSON object gets
+        parsed and the elements we want to display are extracted into other variables. This variabled then are triggered in the steamid handlebars file
+        to expand into the variables that are stored there. One interesting thing about this is that time was stored as unix time stamp. The library
+        moment made conversions from unix time to a more readable format.
+   
+</p>
 </ul>
 

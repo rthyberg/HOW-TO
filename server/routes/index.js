@@ -55,7 +55,6 @@ module.exports = function(app, request, moment) {
                             res.render('news', context);
                         }
                     }
-                    // next(err);
                 }
             });
     });
