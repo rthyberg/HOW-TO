@@ -5,7 +5,7 @@ module.exports = function(app, request) {
         res.render('home');
     });
 
-    app.get('/steam-news', function(req, res) {
+    app.get('/steam-news', function(req, res, next) {
         var url = "http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?"
         var context = {};
         context.items = [];
@@ -29,7 +29,7 @@ module.exports = function(app, request) {
             });
     });
 
-    app.post('/steam-news', function(req, res) {
+    app.post('/steam-news', function(req, res, next) {
         console.log("post request made");
         var url = "http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?"
         var context = {};
@@ -47,8 +47,14 @@ module.exports = function(app, request) {
                 } else {
                     if (response) {
                         console.log(response.statusCode);
+                        if(response.statusCode =403) {
+                           context.items[0]={'contents': "The appid '"
+                                              +appid+
+                                            "' does not exist" };
+                           res.render('news',context);
+                        }
                     }
-                    next(err);
+                   // next(err);
                 }
             });
     });
