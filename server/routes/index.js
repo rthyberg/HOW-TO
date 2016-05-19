@@ -83,7 +83,6 @@ module.exports = function(app, request, moment) {
                 } else {
                     if (response) {
                         console.log(response.statusCode);
-                        res.render('steamid', context.steam.username = "No such user");
                     }
                     //next(err);
                 }
@@ -125,6 +124,160 @@ app.post('/steamid', function(req, res, next) {
         });
 });
 
+app.get('/games', function(req, res, next) {
+            var url = "http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?";
+            var context = {};
+            var steamid = "76561197979155270";
+            request(url + "key=" + api_key + "&steamid=" + steamid + "&include_appinfo=1&include_played_free_games=1&format=json",
+                function(err, response, games) {
+                    if (!err & response.statusCode < 400) {
+                        context.games = JSON.parse(games).response;
+                        context.gameCount = context.games.game_count;
+                        console.log(context.games);
+                        console.log(context.gameCount);
+                        var emptyGame1 = {}
+                        var emptyGame2 = {}
+                        var emptyGame3 = {}
+                        emptyGame1.title = ""
+                        emptyGame2.title = ""
+                        emptyGame3.title = ""
+                        emptyGame1.time = "-1";
+                        emptyGame2.time = "-1";
+                        emptyGame3.time = "-1";
+                        emptyGame1.appid ="";
+                        emptyGame2.appid ="";
+                        emptyGame3.appid ="";
+                        emptyGame1.hash = "";
+                        emptyGame2.hash = "";
+                        emptyGame3.hash = "";
+                        context.topGames = [emptyGame1, emptyGame2, emptyGame3];
+                        console.log(context.topGames);
+                        for(item in context.games.games) {
+                             //   console.log(item);
+                          for(item2 in context.topGames) {
+                                  console.log(context.games.games[item].playtime_forever+ ">" +context.topGames[item2].time);
+                           if(context.games.games[item].playtime_forever > context.topGames[item2].time) {
+                             var new_name = context.games.games[item].name;
+                             var new_time = context.games.games[item].playtime_forever;
+                             var new_appid = context.games.games[item].appid;
+                             var new_hash = context.games.games[item].img_logo_url;
+                             var itr = item2;
+                             var tmp_name, tmp_time, tmp_appid, tmp_hash;
+                             do {
+                              tmp_name = context.topGames[itr].title;
+                              tmp_time = context.topGames[itr].time;
+                              tmp_appid = context.topGames[itr].appid;
+                              tmp_hash = context.topGames[itr].hash;
+                              context.topGames[itr].title = new_name;
+                              context.topGames[itr].time = new_time;
+                              context.topGames[itr].appid = new_appid;
+                              context.topGames[itr].hash = new_hash
+                              new_name = tmp_name;
+                              new_time = tmp_time;
+                              new_appid = tmp_appid;
+                              new_hash = tmp_hash;
+                              itr++;
+                              console.log(context.topGames);
+                           }while(itr<3);
+                           break;
+                          }
+                        }
+                       }
+                       for(item in context.topGames) {
+                         context.topGames[item].url = "http://media.steampowered.com/steamcommunity/public/images/apps/"+
+                         context.topGames[item].appid+"/"+context.topGames[item].hash+".jpg";
+                         context.topGames[item].time = context.topGames[item].time/60;
+                       }
+                        console.log(context.topGames);
+                        res.render('games', context);
+                } else {
+                    if (response) {
+                        console.log(response.statusCode);
+                    }
+                    //next(err);
+                }
+            });
+    });
+
+
+
+app.post('/games', function(req, res, next) {
+            var url = "http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?";
+            var context = {};
+            var steamid = req.body["steamid"] || steamid;
+            request(url + "key=" + api_key + "&steamid=" + steamid + "&include_appinfo=1&include_played_free_games=1&format=json",
+                function(err, response, games) {
+                    if (!err & response.statusCode < 400) {
+                        context.games = JSON.parse(games).response;
+                        context.gameCount = context.games.game_count;
+                        console.log(context.games);
+                        console.log(context.gameCount);
+                        var emptyGame1 = {}
+                        var emptyGame2 = {}
+                        var emptyGame3 = {}
+                        emptyGame1.title = ""
+                        emptyGame2.title = ""
+                        emptyGame3.title = ""
+                        emptyGame1.time = "-1";
+                        emptyGame2.time = "-1";
+                        emptyGame3.time = "-1";
+                        emptyGame1.appid ="";
+                        emptyGame2.appid ="";
+                        emptyGame3.appid ="";
+                        emptyGame1.hash = "";
+                        emptyGame2.hash = "";
+                        emptyGame3.hash = "";
+                        context.topGames = [emptyGame1, emptyGame2, emptyGame3];
+                        console.log(context.topGames);
+                        for(item in context.games.games) {
+                             //   console.log(item);
+                          for(item2 in context.topGames) {
+                                  console.log(context.games.games[item].playtime_forever+ ">" +context.topGames[item2].time);
+                           if(context.games.games[item].playtime_forever > context.topGames[item2].time) {
+                             var new_name = context.games.games[item].name;
+                             var new_time = context.games.games[item].playtime_forever;
+                             var new_appid = context.games.games[item].appid;
+                             var new_hash = context.games.games[item].img_logo_url;
+                             var itr = item2;
+                             var tmp_name, tmp_time, tmp_appid, tmp_hash;
+                             do {
+                              tmp_name = context.topGames[itr].title;
+                              tmp_time = context.topGames[itr].time;
+                              tmp_appid = context.topGames[itr].appid;
+                              tmp_hash = context.topGames[itr].hash;
+                              context.topGames[itr].title = new_name;
+                              context.topGames[itr].time = new_time;
+                              context.topGames[itr].appid = new_appid;
+                              context.topGames[itr].hash = new_hash
+                              new_name = tmp_name;
+                              new_time = tmp_time;
+                              new_appid = tmp_appid;
+                              new_hash = tmp_hash;
+                              itr++;
+                              console.log(context.topGames);
+                           }while(itr<3);
+                           break;
+                          }
+                        }
+                       }
+
+                       for(item in context.topGames) {
+                         context.topGames[item].url = "http://media.steampowered.com/steamcommunity/public/images/apps/"+
+                         context.topGames[item].appid+"/"+context.topGames[item].hash+".jpg";
+                         context.topGames[item].time = context.topGames[item].time/60;
+                       }
+                        console.log(context.topGames);
+                        res.render('games', context);
+                    } else if(response.statusCode == 500) {
+                            res.render('gamesnot');
+                } else {
+                    if (response) {
+                        console.log(response.statusCode);
+                    }
+                    //next(err);
+                }
+            });
+    });
 
 app.use(function(req, res) { // the no page page
     res.status(404);
