@@ -6,6 +6,7 @@ var express = require('express');
 var handlebars = require('express-handlebars').create({defaultLayout:'main'});  // set default to main
 var bodyParser = require('body-parser');    // set body parser
 var request = require('request');
+var moment = require('moment');
 var app = express();
 
 
@@ -20,7 +21,7 @@ app.set('port', 3000); // set port 3001
 
 
 ////////////////////////////Routes
-require('./server/routes')(app, request);
+require('./server/routes')(app, request, moment);
 
 
 /////////////////////////////Start the app
