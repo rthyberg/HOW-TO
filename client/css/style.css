@@ -1,0 +1,14 @@
+body {
+        background:#8D53EE
+}
+ul {
+    list-style-type: none;
+    margin-left: 40px;
+    background: #3399ff;
+    padding: 20px;
+}
+ul li {
+    background: #cce5ff;
+    border: 5px solid black;
+    margin: 5px;
+}
